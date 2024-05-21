@@ -36,11 +36,6 @@ document.addEventListener('keydown', keyDownHandler);
 document.addEventListener('keyup', keyUpHandler);
 
 function keyDownHandler(e) {
-    if (e.key === 'ArrowUp') {
-        rightPaddle.dy = -6;
-    } else if (e.key === 'ArrowDown') {
-        rightPaddle.dy = 6;
-    }
     if (e.key === 'w') {
         leftPaddle.dy = -6;
     } else if (e.key === 's') {
@@ -49,9 +44,6 @@ function keyDownHandler(e) {
 }
 
 function keyUpHandler(e) {
-    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-        rightPaddle.dy = 0;
-    }
     if (e.key === 'w' || e.key === 's') {
         leftPaddle.dy = 0;
     }
@@ -134,4 +126,30 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
+function moveBotPaddle() {
+    if (rightPaddle.y + rightPaddle.height / 2 < ball.y) {
+        rightPaddle.dy = 4;
+    } else if (rightPaddle.y + rightPaddle.height / 2 > ball.y) {
+        rightPaddle.dy = -4;
+    } else {
+        rightPaddle.dy = 0;
+    }
+}
+
+function draw() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawPaddle(leftPaddle);
+    drawPaddle(rightPaddle);
+    drawBall();
+    drawScore();
+
+    movePaddle(leftPaddle);
+    movePaddle(rightPaddle);
+    moveBall();
+    moveBotPaddle(); 
+    requestAnimationFrame(draw);
+}
+
 draw();
+
