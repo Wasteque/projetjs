@@ -11,15 +11,29 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: black;
+            background: #f0f0f0;
         }
-        canvas {
-            background-color: white;
+        #pongCanvas {
+            display: none;
+        }
+        .menu {
+            text-align: center;
+        }
+        .menu button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-    <canvas id="pongCanvas" width="800" height="600"></canvas>
+    <div class="menu" id="menu">
+        <h1>Welcome to Pong</h1>
+        <button id="botButton">Play Against Bot</button>
+        <button id="playerButton">Play Against Player</button>
+    </div>
+    <canvas id="pongCanvas" width="800" height="400"></canvas>
+
     <script src="pong.js"></script>
 </body>
 </html>

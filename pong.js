@@ -4,7 +4,7 @@ const context = canvas.getContext('2d');
 const paddleWidth = 10;
 const paddleHeight = 100;
 const ballRadius = 10;
-
+const botPrecision = 0.70; 
 let leftPaddle = {
     x: 0,
     y: (canvas.height - paddleHeight) / 2,
@@ -32,8 +32,19 @@ let ball = {
 let leftScore = 0;
 let rightScore = 0;
 
-document.addEventListener('keydown', keyDownHandler);
-document.addEventListener('keyup', keyUpHandler);
+let playingAgainstBot = false;
+
+document.getElementById('botButton').addEventListener('click', () => startGame(true));
+document.getElementById('playerButton').addEventListener('click', () => startGame(false));
+
+function startGame(againstBot) {
+    playingAgainstBot = againstBot;
+    document.getElementById('menu').style.display = 'none';
+    canvas.style.display = 'block';
+    document.addEventListener('keydown', keyDownHandler);
+    document.addEventListener('keyup', keyUpHandler);
+    draw();
+}
 
 function keyDownHandler(e) {
     if (e.key === 'w') {
@@ -41,11 +52,25 @@ function keyDownHandler(e) {
     } else if (e.key === 's') {
         leftPaddle.dy = 6;
     }
+
+    if (!playingAgainstBot) {
+        if (e.key === 'ArrowUp') {
+            rightPaddle.dy = -6;
+        } else if (e.key === 'ArrowDown') {
+            rightPaddle.dy = 6;
+        }
+    }
 }
 
 function keyUpHandler(e) {
     if (e.key === 'w' || e.key === 's') {
         leftPaddle.dy = 0;
+    }
+
+    if (!playingAgainstBot) {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            rightPaddle.dy = 0;
+        }
     }
 }
 
@@ -122,34 +147,27 @@ function draw() {
     movePaddle(leftPaddle);
     movePaddle(rightPaddle);
     moveBall();
+    if (playingAgainstBot) {
+        moveBotPaddle();
+    }
 
     requestAnimationFrame(draw);
 }
 
 function moveBotPaddle() {
-    if (rightPaddle.y + rightPaddle.height / 2 < ball.y) {
-        rightPaddle.dy = 4;
-    } else if (rightPaddle.y + rightPaddle.height / 2 > ball.y) {
-        rightPaddle.dy = -4;
+    if (Math.random() < botPrecision) {
+        if (rightPaddle.y + rightPaddle.height / 2 < ball.y - 20) {
+            rightPaddle.dy = 4;
+        } else if (rightPaddle.y + rightPaddle.height / 2 > ball.y + 20) {
+            rightPaddle.dy = -4;
+        } else {
+            rightPaddle.dy = 0;
+        }
     } else {
-        rightPaddle.dy = 0;
+        if (Math.random() > 0.5) {
+            rightPaddle.dy = 4;
+        } else {
+            rightPaddle.dy = -4;
+        }
     }
 }
-
-function draw() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    drawPaddle(leftPaddle);
-    drawPaddle(rightPaddle);
-    drawBall();
-    drawScore();
-
-    movePaddle(leftPaddle);
-    movePaddle(rightPaddle);
-    moveBall();
-    moveBotPaddle(); 
-    requestAnimationFrame(draw);
-}
-
-draw();
-
