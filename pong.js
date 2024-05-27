@@ -4,7 +4,7 @@ const context = canvas.getContext('2d');
 const paddleWidth = 10;
 const paddleHeight = 100;
 const ballRadius = 10;
-const botPrecision = 0.70; 
+const botPrecision = 0.80; 
 let leftPaddle = {
     x: 0,
     y: (canvas.height - paddleHeight) / 2,
